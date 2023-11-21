@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <title>Sneaker Formula</title>
+</head>
+
+{% block content %}
+<body>
+    <h1>This is a Sneaker Scraper</h1>
+    <div class="grid">
+        {% for item in items %}
+        <div class="card">
+            <img src="{{item.image_url}}" alt="{{item.model}}">
+            <h2>{{item.name}}</h1>
+            <div>{{item.image_url}}</div>
+            <p class="price">${{item.offers.lowPrice}}</p>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
+{% endblock content %}
