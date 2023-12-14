@@ -1,0 +1,19 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<main>
+    <h1>This is a Sneaker Scraper</h1>
+    <div class="grid">
+        {% for item in items %}
+        <div class="card">
+            <a href="{% url 'shoe' item.id %}">
+            <img src="{{item.image_url}}" alt="{{item.model}}">
+            </a>
+            <h2>{{item.name}}</h1>
+            <div>{{item.image_url}}</div>
+            <p class="price">${{item.offers.lowPrice}}</p>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock content %}

@@ -9,5 +9,12 @@ def home(request):
     
     context  = {'items':items}
     
-    return render(request, 'main.html', context)
+    return render(request, 'base/home.html', context)
 
+
+def viewShoe(request, pk):
+    shoe = Product.objects.get(id=pk)
+    
+    context = {'shoe':shoe}
+
+    return render(request, 'base/shoe.html', context)
