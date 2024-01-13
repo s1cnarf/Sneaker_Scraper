@@ -31,75 +31,82 @@ def run():
     # Changing the property of the navigator value for webdriver to undefined 
     driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})") 
 
-    driver.get('https://stockx.com/sneakers')
 
-    driver.implicitly_wait(30)
+    url = 'https://stockx.com/sneakers?page={}'
 
-
-
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@id = 'browse-wrapper']//script[1]")))
-
-    get_list_element = driver.find_element(By.XPATH, "//div[@id = 'browse-wrapper']//script[1]")
-
-    innerHTML = get_list_element.get_attribute('innerHTML')
-
-    data = json.loads(innerHTML)
-
-    shoes = data['itemListElement']
-    print("SHOES SIZE: ", len(shoes))
-
-    try: 
-        for shoe in shoes:
-            detail = shoe['item']
-            
-            # details
-            type = detail['@type']
-            brand = detail['brand']
-            color = detail['color']
-            description = detail['description']
-
-            imageURL = modify_url(detail['image'])
+    for page_number in range(1,26):
         
-            itemCondition = detail['itemCondition']
-            model = detail['model']
-            name = detail['name']
-            releaseDate = detail['releaseDate']
-            sku = detail['sku']
-            url = detail['url']
+        driver.get(url.format(page_number))
 
-            # offer
-            offer = detail['offers']
-            o_type = offer['@type']
-            o_lowPrice = offer['lowPrice']
-            o_highPrice = offer['highPrice']
-            o_priceCurrency = offer['priceCurrency']
-            o_url = offer['url']
+        driver.implicitly_wait(30)
+
+
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.XPATH, "//div[@id = 'browse-wrapper']//script[1]")))
+
+        get_list_element = driver.find_element(By.XPATH, "//div[@id = 'browse-wrapper']//script[1]")
+
+        innerHTML = get_list_element.get_attribute('innerHTML')
+
+        data = json.loads(innerHTML)
+
+        shoes = data['itemListElement']
+        print("SHOES SIZE: ", len(shoes))
+
+        try: 
+            pass
+            # for shoe in shoes:
+            #     detail = shoe['item']
+                
+            #     # details
+            #     type = detail['@type']
+            #     brand = detail['brand']
+            #     color = detail['color']
+            #     description = detail['description']
+
+            #     imageURL = modify_url(detail['image'])
             
+            #     itemCondition = detail['itemCondition']
+            #     model = detail['model']
+            #     name = detail['name']
+            #     releaseDate = detail['releaseDate']
+            #     sku = detail['sku']
+            #     url = detail['url']
 
-            offer_object = Offer.objects.create(
-                type = o_type,
-                lowPrice = o_lowPrice,
-                highPrice = o_highPrice,
-                priceCurrency = o_priceCurrency,
-                offer_url = o_url
-            )
+            #     # offer
+            #     offer = detail['offers']
+            #     o_type = offer['@type']
+            #     o_lowPrice = offer['lowPrice']
+            #     o_highPrice = offer['highPrice']
+            #     o_priceCurrency = offer['priceCurrency']
+            #     o_url = offer['url']
+                
 
-            Product.objects.create(
-                type = type,
-                brand = brand,
-                color = color,
-                description = description,
-                image_url = imageURL,
-                itemcondition = itemCondition,
-                model = model,
-                name = name,
-                releaseDate = releaseDate,
-                sku = sku,
-                product_url = url,
-                offers = offer_object
-            )
-    except Exception as e: 
-        print('Problem inserting in database', e)
+            #     offer_object = Offer.objects.create(
+            #         type = o_type,
+            #         lowPrice = o_lowPrice,
+            #         highPrice = o_highPrice,
+            #         priceCurrency = o_priceCurrency,
+            #         offer_url = o_url
+            #     )
+
+            #     Product.objects.create(
+            #         type = type,
+            #         brand = brand,
+            #         color = color,
+            #         description = description,
+            #         image_url = imageURL,
+            #         itemcondition = itemCondition,
+            #         model = model,
+            #         name = name,
+            #         releaseDate = releaseDate,
+            #         sku = sku,
+            #         product_url = url,
+            #         offers = offer_object
+            #     )
+        except Exception as e: 
+            print('Problem inserting in database', e)
+
+        driver.implicitly_wait(30)
 
 
 
