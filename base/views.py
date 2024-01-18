@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .models import Product, Offer
+from .models import Product, Message
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -16,8 +16,19 @@ def home(request):
 
 def viewShoe(request, pk):
     shoe = Product.objects.get(id=pk)
-    
-    context = {'shoe':shoe}
+    shoe_comments = shoe.message_set.all()
+    shoe_participants = shoe.participants.all()
+
+    if request.method == 'POST':
+        comment = Message.objects.create(
+            user = request.user,
+            shoe = shoe,
+            body = request.POST.get("body")
+        )
+        shoe.participants.add(request.user)
+        return redirect('shoe', pk=shoe.id)
+
+    context = {'shoe':shoe, 'shoe_comments':shoe_comments}
 
     return render(request, 'base/shoe.html', context)
 

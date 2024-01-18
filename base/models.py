@@ -36,6 +36,8 @@ class Product(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
+    participants = models.ManyToManyField(User, related_name="participants", blank=True)
+
     class Meta:
         ordering = ['-updated', '-created']
 
@@ -45,7 +47,8 @@ class Product(models.Model):
 
 class Message(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    room = models.ForeignKey(Product, on_delete=models.CASCADE)
+    shoe = models.ForeignKey(Product, on_delete=models.CASCADE)
+    body = models.TextField()
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 

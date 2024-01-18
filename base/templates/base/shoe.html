@@ -3,9 +3,30 @@
 
 {% block content %}
 <main>
+    <a href="{% url 'home' %}">Home</a>
     <div>
         <h1>{{shoe.name}}</h1>
     </div>
+
+    <h3>Comments</h3>
+    <hr>
+    {% for comment in shoe_comments %}
+    <div>
+        <small>@{{comment.user}}  {{comment.created|timesince}} ago</small>
+        <p>{{comment.body}}</p>
+        <hr>
+    </div>
+    {% endfor %}
+
+    {% if request.user.is_authenticated %}
+    <div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <p>Add Comments</p>
+            <input type="text" name="body" placeholder="Write your comments here">
+        </form>
+    </div>
+    {% endif %}
 
 </main>
 {% endblock content %}
