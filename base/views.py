@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 def home(request):
     items = Product.objects.all()
     
-    context  = {'items':items}
+    context  = {'items':items, 'user':request.user}
     
     return render(request, 'base/home.html', context)
 

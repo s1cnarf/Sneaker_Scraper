@@ -3,9 +3,16 @@
 {% block content %}
 <main>
     <h1>This is a Sneaker Scraper</h1>
+    {% if user.is_authenticated %}
     <div>
         <a href="{% url 'logout' %}">Logout</a>
     </div>
+    {% else %}
+    <div>
+        <a href="{% url 'login' %}">Login</a>
+    </div>
+    {% endif %}
+
     <div class="grid">
         {% for item in items %}
         <div class="card">
